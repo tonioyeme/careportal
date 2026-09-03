@@ -1,5 +1,7 @@
+import { useEffect } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
 import { useStore } from "../store";
+import { closeRouteScope, registerRouteScope } from "../webmcp/register";
 import Highlightable from "../components/Highlightable";
 import { formatDayTime, relativeDay, specialtyLabel } from "../components/format";
 
@@ -16,8 +18,18 @@ export default function AppointmentDetail() {
   const providers = useStore((s) => s.providers);
 
   const appt = appointments.find((a) => a.id === id);
+  const belongsToCurrentPatient = Boolean(appt && appt.patientId === patientId);
 
-  if (!appt || appt.patientId !== patientId) {
+  // The route scope lives exactly as long as this page does. Mount registers
+  // reschedule_appointment bound to this id; unmount aborts its AbortSignal,
+  // which unregisters it. Switching patients closes it too, from register.ts.
+  useEffect(() => {
+    if (!id || !belongsToCurrentPatient) return;
+    registerRouteScope(id);
+    return () => closeRouteScope();
+  }, [id, belongsToCurrentPatient]);
+
+  if (!appt || !belongsToCurrentPatient) {
     return <Navigate to="/appointments" replace />;
   }
 
