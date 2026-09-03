@@ -1,8 +1,8 @@
 # Devpost submission copy
 
-**Live URL:** _(fill in after deploy)_
+**Live URL:** https://careportal.vercel.app
 **Demo login note for the form:** "Demo login button on the login page — press *Sign in as Linda (demo)*. No credentials needed."
-**Repo:** _(fill in)_ · **Video:** _(fill in)_
+**Repo:** https://github.com/tonioyeme/careportal · **Video:** _(填入 YouTube 链接)_
 
 ---
 
