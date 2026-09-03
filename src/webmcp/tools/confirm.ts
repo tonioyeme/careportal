@@ -25,6 +25,7 @@ function editedFrom(r: ConfirmResult): string | undefined {
 export function requestRefillTool(): ToolDefinition {
   return {
     name: "request_refill",
+    annotations: { readOnlyHint: false, destructiveHint: false },
     description:
       `${actingPrefix()} Requests a refill for one medication. Opens a confirmation card ` +
       `the user must approve; nothing is submitted until they do. Returns status: ` +
@@ -94,6 +95,7 @@ export function requestRefillTool(): ToolDefinition {
 export function sendMessageToProviderTool(): ToolDefinition {
   return {
     name: "send_message_to_provider",
+    annotations: { readOnlyHint: false, destructiveHint: false },
     description:
       `${actingPrefix()} Drafts a reply in an existing message thread. Opens a confirmation ` +
       `card where the user can edit the text before it is sent — whatever they leave in the ` +

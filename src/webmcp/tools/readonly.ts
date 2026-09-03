@@ -36,6 +36,7 @@ function unreadThreads(pid: PatientId): MessageThread[] {
 export function getPatientContextTool(): ToolDefinition {
   return {
     name: "get_patient_context",
+    annotations: { readOnlyHint: true },
     description:
       `${actingPrefix()} Returns who the user is acting for, their proxy permissions, and ` +
       `counts of open items (unread messages, low medications, pending documents, ` +
@@ -88,6 +89,7 @@ export function getPatientContextTool(): ToolDefinition {
 export function getUpcomingAppointmentsTool(): ToolDefinition {
   return {
     name: "get_upcoming_appointments",
+    annotations: { readOnlyHint: true },
     description:
       `${actingPrefix()} Lists scheduled appointments within the next N days with provider, ` +
       `specialty, datetime, location, and in-network status. Navigates the page to the ` +
@@ -154,6 +156,7 @@ export function getUpcomingAppointmentsTool(): ToolDefinition {
 export function getMedicationsTool(): ToolDefinition {
   return {
     name: "get_medications",
+    annotations: { readOnlyHint: true },
     description:
       `${actingPrefix()} Lists active medications with days of supply remaining, ` +
       `whether a refill can be requested directly (refillable) or needs prescriber approval, ` +
@@ -211,6 +214,7 @@ export function getMedicationsTool(): ToolDefinition {
 export function getRecentResultsTool(): ToolDefinition {
   return {
     name: "get_recent_results",
+    annotations: { readOnlyHint: true },
     description:
       `${actingPrefix()} Lists lab results newest first: status (pending/final), whether any ` +
       `value was flagged, a plain-language summary, and the id of any related message thread. ` +
@@ -280,6 +284,7 @@ export function getRecentResultsTool(): ToolDefinition {
 export function getUnreadMessagesTool(): ToolDefinition {
   return {
     name: "get_unread_messages",
+    annotations: { readOnlyHint: true },
     description:
       `${actingPrefix()} Returns unread messages from providers: thread_id, provider, subject, ` +
       `and body. Navigates the page to the results page and expands the thread so the user can ` +

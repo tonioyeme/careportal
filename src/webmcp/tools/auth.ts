@@ -11,6 +11,7 @@ import { text } from "../helpers";
 export function getLoginStatusTool(): ToolDefinition {
   return {
     name: "get_login_status",
+    annotations: { readOnlyHint: true },
     description:
       "Reports whether a user is signed in to the patient portal. Agents cannot sign in " +
       "on the user's behalf — if not signed in, tell the user to sign in manually in the " +

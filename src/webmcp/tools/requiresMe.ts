@@ -14,6 +14,7 @@ const WHY_HUMAN = "Requires legal signature by patient or authorized proxy";
 export function whatRequiresMeTool(): ToolDefinition {
   return {
     name: "what_requires_me",
+    annotations: { readOnlyHint: true },
     description:
       `${actingPrefix()} Lists the actions only the user can perform: documents awaiting a ` +
       `legal signature, full records that must be opened directly, and account settings. ` +

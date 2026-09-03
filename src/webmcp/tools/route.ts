@@ -26,6 +26,7 @@ function fmt(iso: string): string {
 export function rescheduleAppointmentTool(appointmentId: string): ToolDefinition {
   return {
     name: "reschedule_appointment",
+    annotations: { readOnlyHint: false, destructiveHint: false },
     description:
       `${actingPrefix()} Moves the appointment currently open on screen to one of its ` +
       `available slots. Opens a confirmation card showing the old and the new time; nothing ` +

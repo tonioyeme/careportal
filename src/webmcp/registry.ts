@@ -16,6 +16,17 @@ export interface ToolDefinition {
   name: string;
   description: string;
   inputSchema: Record<string, unknown>;
+  /**
+   * Machine-readable capability tier, per the WebMCP guidance. `readOnlyHint`
+   * lets an agent tell at a glance which tools it may call freely and which
+   * ones will stop and ask a human. The tools that change something are also
+   * the tools that open a confirmation card, so this mirrors the real boundary.
+   */
+  annotations?: {
+    readOnlyHint?: boolean;
+    destructiveHint?: boolean;
+    idempotentHint?: boolean;
+  };
   execute: (input: any) => Promise<ToolResult> | ToolResult;
 }
 export interface ToolResult {
