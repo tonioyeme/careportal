@@ -40,7 +40,10 @@ export function getPatientContextTool(): ToolDefinition {
     description:
       `${actingPrefix()} Returns who the user is acting for, their proxy permissions, and ` +
       `counts of open items (unread messages, low medications, pending documents, ` +
-      `appointments in the next 7 days). Call this FIRST, before any other tool. ` +
+      `appointments in the next 7 days). Call this ONCE, at the start of a conversation, ` +
+      `before any other tool. Do not call it again in the same conversation unless the user ` +
+      `switches to a different person — the counts are already in your context and calling ` +
+      `it again sends the user's screen back to the overview for no reason. ` +
       `Contains no clinical data — use the other tools for that.`,
     inputSchema: {
       type: "object",
