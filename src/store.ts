@@ -3,6 +3,8 @@ import * as seed from "./data/seed";
 import type {
   ActivityEntry,
   Appointment,
+  Claim,
+  Insurance,
   Highlight,
   LabResult,
   Medication,
@@ -41,6 +43,8 @@ export interface AppState {
   results: LabResult[];
   threads: MessageThread[];
   documents: PendingDocument[];
+  insurance: Insurance[];
+  claims: Claim[];
 
   // agent-visible UI state
   highlight: Highlight | null;
@@ -83,6 +87,8 @@ export const useStore = create<AppState>((set, get) => ({
   results: structuredClone(seed.results),
   threads: structuredClone(seed.threads),
   documents: structuredClone(seed.documents),
+  insurance: structuredClone(seed.insurance),
+  claims: structuredClone(seed.claims),
 
   highlight: null,
   confirm: null,
@@ -157,6 +163,8 @@ export const ds: DataSource = {
   getResults: (id) => useStore.getState().results.filter((r) => r.patientId === id),
   getThreads: (id) => useStore.getState().threads.filter((t) => t.patientId === id),
   getPendingDocuments: (id) => useStore.getState().documents.filter((d) => d.patientId === id),
+  getInsurance: (id) => useStore.getState().insurance.find((i) => i.patientId === id)!,
+  getClaims: (id) => useStore.getState().claims.filter((c) => c.patientId === id),
   requestRefill: (m) => useStore.getState().requestRefill(m),
   sendMessage: (t, b) => useStore.getState().sendMessage(t, b),
   reschedule: (a, s) => useStore.getState().reschedule(a, s),

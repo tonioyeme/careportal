@@ -12,6 +12,7 @@ import Appointments from "./pages/Appointments";
 import AppointmentDetail from "./pages/AppointmentDetail";
 import Medications from "./pages/Medications";
 import Results from "./pages/Results";
+import Insurance from "./pages/Insurance";
 import Todo from "./pages/Todo";
 
 /**
@@ -60,6 +61,7 @@ export default function App() {
               <Route path="/appointments/:id" element={<AppointmentDetail />} />
               <Route path="/medications" element={<Medications />} />
               <Route path="/results" element={<Results />} />
+              <Route path="/insurance" element={<Insurance />} />
               <Route path="/todo" element={<Todo />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>

@@ -19,7 +19,9 @@ wire "App renders the confirmation card"     "<ConfirmCard"        src/App.tsx
 wire "Appointment detail opens route scope"  "registerRouteScope"  src/pages/AppointmentDetail.tsx
 wire "Appointment detail closes route scope" "closeRouteScope"     src/pages/AppointmentDetail.tsx
 wire "To-do page renders the sign modal"     "<SignModal"          src/pages/Todo.tsx
-for k in appointment medication result thread document; do
+wire "App routes to the insurance page"      "path=\"/insurance\""  src/App.tsx
+wire "Insurance is in the side nav"          "Insurance"           src/components/SideNav.tsx
+for k in appointment medication result thread document claim; do
   if grep -rq "kind=\"$k\"" src/pages src/components; then
     echo "  ok   $k rows are highlightable"
   else

@@ -13,6 +13,7 @@ export default function Overview() {
   const medications = useStore((s) => s.medications);
   const threads = useStore((s) => s.threads);
   const documents = useStore((s) => s.documents);
+  const claims = useStore((s) => s.claims);
 
   const patient = patients.find((p) => p.id === patientId)!;
 
@@ -29,6 +30,8 @@ export default function Overview() {
     .flatMap((t) => t.messages.filter((m) => !m.read && m.from === "provider"));
 
   const unsigned = documents.filter((d) => d.patientId === patientId && !d.signed);
+
+  const denied = claims.filter((c) => c.patientId === patientId && c.status === "denied");
 
   return (
     <div>
@@ -122,9 +125,16 @@ export default function Overview() {
           </li>
 
           {/* Insurance ---------------------------------------------------- */}
-          <li className="border-y border-line py-4">
-            <p className="text-[18px] font-bold text-ink">Insurance</p>
-            <p className="mt-1 text-[16px] text-ink">{patient.insuranceLine}</p>
+          <li>
+            <Link to="/insurance" className="block border-y border-line py-4 hover:bg-paper">
+              <p className="text-[18px] font-bold text-ink">Insurance</p>
+              <p className="mt-1 text-[16px] text-ink">{patient.insuranceLine}</p>
+              {denied.length > 0 && (
+                <p className="tnum mt-1 text-[16px] font-bold text-ochre">
+                  {plural(denied.length, "denied claim", "denied claims")} to look at
+                </p>
+              )}
+            </Link>
           </li>
         </ul>
       </section>

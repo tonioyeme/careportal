@@ -12,7 +12,7 @@
 **说**：
 > This is Linda. Every week she spends an evening in her mother's patient portal.
 > Margaret is seventy-eight. Three specialists. Six medications.
-> The portal has everything Linda needs, in five screens that know nothing about each other.
+> The portal has everything Linda needs, in six screens that know nothing about each other.
 
 **点**：`Sign in as Linda (demo)`
 
@@ -26,13 +26,13 @@
 
 **说**：
 > Linda manages her mother's care through proxy access.
-> The moment she switches, all eight tools re-register. Every description now starts with "Acting for Margaret Lee via proxy access."
+> The moment she switches, all nine tools re-register. Every description now starts with "Acting for Margaret Lee via proxy access."
 > The portal decides what the agent is looking at.
 
-**点**：鼠标划过右下角 `WebMCP native · 8 tools`，再划过空的 Agent activity 栏
+**点**：鼠标划过右下角 `WebMCP native · 9 tools`，再划过空的 Agent activity 栏
 
 **说**：
-> Eight tools, live on this page. No API key. No second login.
+> Nine tools, live on this page. No API key. No second login.
 > Watch the right-hand column. Everything the agent does shows up there.
 
 ---
@@ -80,6 +80,28 @@ Yes, please request the refill.
 
 **说**：
 > Requested.
+
+---
+
+## 幕 4.5 — 保险（可选，约 20 秒）
+
+只在总时长还有余裕时录。如果录完幕 4 已经超过 2 分 10 秒，跳过这一幕。
+
+**点**：输入框 → `Cmd+A`
+
+**输入**：
+```
+Was anything denied by her insurance?
+```
+
+**点**：`Send`
+
+**画面**：跳到 Insurance 页，那笔被拒付的心脏超声高亮
+
+**说**：
+> Twelve hundred dollars, denied for a missing prior authorization. She had no idea.
+> The plan has to let an app read this. Nothing in that rule lets an agent appeal it.
+> So it tells her the reason and the deadline, and stops.
 
 ---
 

@@ -6,7 +6,7 @@ and refuses to do the parts only a human may.
 CarePortal is a WebMCP demo. It is a working (seeded, no backend) patient portal
 for **Linda**, 52, who manages her mother **Margaret**'s care through proxy access:
 three specialists, six medications, lab results, provider messages, and a consent
-form waiting for a signature. The portal registers ten tools on
+form waiting for a signature. The portal registers eleven tools on
 `document.modelContext`. An agent already signed in as Linda can read across all
 five modules, and can take exactly two write actions, each behind a confirmation
 card rendered by the portal itself. It cannot sign anything.
@@ -115,7 +115,7 @@ document. The signature modal is reachable only by a human clicking it.
 
 ## Tools
 
-Ten tools in three scopes. Each scope is an `AbortController`; closing a scope
+Eleven tools in three scopes. Each scope is an `AbortController`; closing a scope
 unregisters everything in it in one call.
 
 | Tool | Tier | Scope | Returns |
@@ -126,6 +126,7 @@ unregisters everything in it in one call.
 | `get_medications` | P0 | `patient` | days remaining, refillable, prescriber, `low` flag |
 | `get_recent_results` | P0 | `patient` | status, flagged, plain-language summary, related thread |
 | `get_unread_messages` | P0 | `patient` | thread id, provider, subject, body |
+| `get_coverage` | P0 | `patient` | plan, deductible and out-of-pocket progress, claims, denial reasons and appeal deadlines |
 | `request_refill` | P0 | `patient` | `submitted` / `declined_by_user` / `requires_provider_approval` / `pending_user_confirmation` / `busy` / `already_requested` |
 | `send_message_to_provider` | P0 | `patient` | `sent` (with final text) / `declined_by_user` / `pending_user_confirmation` / `busy` |
 | `what_requires_me` | P0 | `patient` | items only a human can complete, each with `why_human` |
@@ -136,8 +137,8 @@ unregisters everything in it in one call.
 | Event | Effect |
 |---|---|
 | App start, signed out | open `auth` — one tool |
-| Sign in | close `auth`, open `patient` — eight tools |
-| Switch patient | reopen `patient`, re-registering all eight with the new patient injected into every description; close `route` |
+| Sign in | close `auth`, open `patient` — nine tools |
+| Switch patient | reopen `patient`, re-registering all nine with the new patient injected into every description; close `route` |
 | Enter an appointment detail page | open `route` — `reschedule_appointment`, closed over that appointment |
 | Leave it | close `route` |
 | Sign out | close all, reopen `auth` |
@@ -176,6 +177,10 @@ in front of a caregiver deciding about her mother's medication is not a kindness
 What each tool would talk to in a real deployment, and whether patient-access FHIR
 would let you do it.
 
+Two different mandates are in play, and both stop at the same place.
+
+**Clinical side.** Provider Patient Access APIs, mandated by the 21st Century Cures Act.
+
 | Tool | FHIR resource | Patient-authorized API |
 |---|---|---|
 | `get_upcoming_appointments` | `Appointment` | read |
@@ -186,6 +191,22 @@ would let you do it.
 | `send_message_to_provider` | — | **no write endpoint** |
 | `reschedule_appointment` | `Appointment/$book` | rarely exposed |
 | signing a consent form | — | none, and none wanted |
+
+**Payer side.** Payer Patient Access APIs, mandated by the CMS Interoperability
+and Patient Access rule. A different regulator, a different server, the same shape.
+
+| Tool | FHIR resource | Patient-authorized API |
+|---|---|---|
+| `get_coverage` (plan) | `Coverage` | read |
+| `get_coverage` (claims) | `ExplanationOfBenefit` | read |
+| appealing a denial | — | **no write endpoint** |
+
+That last row is the one to look at. A denied claim is the single most consequential
+thing in this portal, and the regulation that guarantees you can *read* about it
+guarantees nothing about *acting* on it. Appeals happen in the payer's portal, by a
+human, on a deadline. So `get_coverage` reports the denial and the deadline and
+explicitly tells the agent it cannot file the appeal, exactly the way
+`what_requires_me` handles the consent form.
 
 The read column is the half a FHIR client could already do. The rest is the half
 WebMCP makes possible, and it is the half a caregiver actually spends her evening on.

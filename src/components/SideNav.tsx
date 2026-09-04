@@ -2,7 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useStore } from "../store";
 
 /**
- * Five destinations, 200px, fixed. An ochre dot means "there is something here
+ * Six destinations, 200px, fixed. An ochre dot means "there is something here
  * that needs you" for the patient you are currently managing.
  */
 export default function SideNav() {
@@ -11,18 +11,21 @@ export default function SideNav() {
   const medications = useStore((s) => s.medications);
   const threads = useStore((s) => s.threads);
   const documents = useStore((s) => s.documents);
+  const claims = useStore((s) => s.claims);
 
   const lowMeds = medications.some((m) => m.patientId === patientId && m.daysRemaining < 7);
   const unread = threads.some(
     (t) => t.patientId === patientId && t.messages.some((m) => !m.read && m.from === "provider"),
   );
   const unsigned = documents.some((d) => d.patientId === patientId && !d.signed);
+  const denied = claims.some((c) => c.patientId === patientId && c.status === "denied");
 
   const items: { to: string; label: string; attention: boolean }[] = [
     { to: "/", label: "Overview", attention: false },
     { to: "/appointments", label: "Appointments", attention: false },
     { to: "/medications", label: "Medications", attention: lowMeds },
     { to: "/results", label: "Results", attention: unread },
+    { to: "/insurance", label: "Insurance", attention: denied },
     { to: "/todo", label: "To do", attention: unsigned },
   ];
 

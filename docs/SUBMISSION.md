@@ -43,11 +43,19 @@ what it cannot do and hand the work back, and its description says so in plain
 language. An agent platform that can express "not this, ever" is one an EHR security
 review can actually approve.
 
+The same shape shows up on the billing side, under a different regulator. Payer
+Patient Access APIs let an app read a patient's claims, so the agent can find the
+denied echocardiogram and read back why. Nothing in that mandate lets it file the
+appeal, which is a formal document with a deadline that a human must submit through
+the plan. Read is legislated; acting is not. That gap is not a healthcare quirk. It
+is the shape of nearly every regulated workflow on the web, and it is the gap WebMCP
+is for.
+
 ## 4. How did you build it?
 
-Ten tools across three scopes — `auth`, `patient`, `route` — each scope an
+Eleven tools across three scopes — `auth`, `patient`, `route` — each scope an
 `AbortController`, so closing one unregisters everything in it atomically. The
-patient scope is rebuilt on every patient switch, which regenerates all eight
+patient scope is rebuilt on every patient switch, which regenerates all nine
 descriptions with the current patient injected: switching from Linda to Margaret
 literally changes what the agent reads. Write tools return a promise resolved by an
 in-page confirmation card, with a 60-second timeout treated as a protocol state

@@ -31,6 +31,7 @@ import {
 } from "./tools/readonly";
 import { requestRefillTool, sendMessageToProviderTool } from "./tools/confirm";
 import { whatRequiresMeTool } from "./tools/requiresMe";
+import { getCoverageTool } from "./tools/insurance";
 import { rescheduleAppointmentTool } from "./tools/route";
 
 // ---------------------------------------------------------------------------
@@ -43,7 +44,7 @@ function buildAuthScope() {
 }
 
 /**
- * The eight patient-scope tools. Called on login and again on every patient
+ * The nine patient-scope tools. Called on login and again on every patient
  * switch so each description carries the current `actingPrefix()`.
  */
 function buildPatientScope() {
@@ -53,6 +54,7 @@ function buildPatientScope() {
   registerTool("patient", getMedicationsTool());
   registerTool("patient", getRecentResultsTool());
   registerTool("patient", getUnreadMessagesTool());
+  registerTool("patient", getCoverageTool());
   registerTool("patient", requestRefillTool());
   registerTool("patient", sendMessageToProviderTool());
   registerTool("patient", whatRequiresMeTool());

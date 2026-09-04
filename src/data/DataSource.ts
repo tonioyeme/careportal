@@ -1,5 +1,7 @@
 import type {
   Appointment,
+  Claim,
+  Insurance,
   LabResult,
   Medication,
   MessageThread,
@@ -24,6 +26,8 @@ export interface DataSource {
   getResults(id: PatientId): LabResult[];
   getThreads(id: PatientId): MessageThread[];
   getPendingDocuments(id: PatientId): PendingDocument[];
+  getInsurance(id: PatientId): Insurance;
+  getClaims(id: PatientId): Claim[];
 
   // writes — every one of these is behind an in-page confirmation
   // or is human-only (signDocument has NO corresponding WebMCP tool)
@@ -56,6 +60,12 @@ export class FhirDataSource implements DataSource {
   getThreads(): MessageThread[] { throw new Error("not implemented"); }
   // GET /DocumentReference?patient={id}&status=current  (consent forms, where exposed)
   getPendingDocuments(): PendingDocument[] { throw new Error("not implemented"); }
+  // GET /Coverage?patient={id} — payer Patient Access API, mandated by the CMS
+  // Interoperability and Patient Access rule, not by the clinical-side Cures Act rule.
+  getInsurance(): Insurance { throw new Error("not implemented"); }
+  // GET /ExplanationOfBenefit?patient={id} — same payer API. Read only.
+  // Appealing a denial has no write endpoint; it happens in the payer's portal.
+  getClaims(): Claim[] { throw new Error("not implemented"); }
 
   // No patient-access write endpoint. Portal-only.
   requestRefill(): void { throw new Error("no patient-access FHIR write; portal-only"); }

@@ -20,6 +20,7 @@ import Appointments from "../src/pages/Appointments";
 import AppointmentDetail from "../src/pages/AppointmentDetail";
 import Medications from "../src/pages/Medications";
 import Results from "../src/pages/Results";
+import Insurance from "../src/pages/Insurance";
 import Todo from "../src/pages/Todo";
 
 let pass = 0;
@@ -55,14 +56,14 @@ switch (scenario) {
     check("agent rail empty state copy", rail.includes("When your agent uses this page, its steps show here."), rail);
     check("badge reports unavailable without the flag", rail.includes("WebMCP unavailable") && rail.includes("enable-webmcp-testing"));
     const nav = strip(render(<SideNav />, "/medications"));
-    check("side nav lists five sections", ["Overview", "Appointments", "Medications", "Results", "To do"].every((x) => nav.includes(x)), nav);
+    check("side nav lists six sections", ["Overview", "Appointments", "Medications", "Results", "Insurance", "To do"].every((x) => nav.includes(x)), nav);
     break;
   }
   case "badge": {
     S().login();
-    S().setWebMCP({ status: "native", toolCount: 8 });
+    S().setWebMCP({ status: "native", toolCount: 9 });
     const rail = strip(render(<AgentRail />));
-    check("badge reports native with a tool count", /WebMCP native\s*·\s*8 tools/.test(rail), rail.slice(-200));
+    check("badge reports native with a tool count", /WebMCP native\s*·\s*9 tools/.test(rail), rail.slice(-200));
     break;
   }
   case "linda": {
@@ -72,6 +73,7 @@ switch (scenario) {
       ["appointments", <Appointments />, "/appointments"],
       ["medications", <Medications />, "/medications"],
       ["results", <Results />, "/results"],
+  ["insurance", <Insurance />, "/insurance"],
       ["todo", <Todo />, "/todo"],
     ] as const) {
       let html = ""; let threw = "";
@@ -107,6 +109,14 @@ switch (scenario) {
     const results = strip(render(<Results />, "/results"));
     check("results shows the metabolic panel", results.includes("Comprehensive metabolic panel"), results.slice(0, 300));
     check("results embeds Dr. Rivera's message", /creatinine/i.test(results), results.slice(0, 400));
+
+    const ins = strip(render(<Insurance />, "/insurance"));
+    check("insurance names the plan", ins.includes("Medicare Part B"), ins.slice(0, 300));
+    check("insurance shows the supplement", /AARP/.test(ins));
+    check("insurance shows the denied claim", ins.includes("Echocardiogram"), ins.slice(0, 400));
+    check("denied claim states the reason", /prior authorization/i.test(ins), ins.slice(0, 600));
+    check("denied claim shows an appeal deadline", /appeal/i.test(ins));
+    check("no appeal button on the page", !/>\s*(File|Submit|Start) an appeal/i.test(render(<Insurance />, "/insurance")));
 
     const todo = strip(render(<Todo />, "/todo"));
     check("todo shows the consent form", todo.includes("Consent for cardiac stress test"), todo.slice(0, 300));

@@ -15,6 +15,34 @@ export interface Patient {
   insuranceLine: string; // one line for the overview, e.g. "Medicare + AARP Supplemental"
 }
 
+export interface Insurance {
+  patientId: PatientId;
+  planName: string;        // "Medicare Part B"
+  supplementName?: string; // "AARP Supplemental Plan F"
+  memberId: string;
+  groupNumber?: string;
+  effectiveSince: string;  // YYYY-MM-DD
+  /** What the member owes before the plan pays, and where they stand against it. */
+  deductible: { annual: number; met: number };
+  outOfPocketMax: { annual: number; met: number };
+}
+
+/** One processed claim. `denied` is the interesting one: it is the case a human has to act on. */
+export interface Claim {
+  id: string;
+  patientId: PatientId;
+  providerId: string;
+  serviceDate: string;     // ISO
+  description: string;
+  billed: number;          // what the provider charged
+  planPaid: number;
+  patientOwes: number;
+  status: "paid" | "denied" | "processing";
+  denialReason?: string;
+  appealDeadline?: string; // YYYY-MM-DD, only when denied
+  relatedAppointmentId?: string;
+}
+
 export interface Provider {
   id: string;
   name: string;
@@ -93,7 +121,8 @@ export type HighlightKind =
   | "medication"
   | "result"
   | "thread"
-  | "document";
+  | "document"
+  | "claim";
 
 export interface Highlight {
   kind: HighlightKind;

@@ -53,7 +53,7 @@ check("get_login_status reports logged_in false", loginStatus.logged_in === fals
 
 S().login();
 await new Promise((r) => setTimeout(r, 0));
-check("after login: 8 patient tools", registered.size === 8, `got ${registered.size}: ${names().join()}`);
+check("after login: 9 patient tools", registered.size === 9, `got ${registered.size}: ${names().join()}`);
 check("auth tool unregistered", !registered.has("get_login_status"));
 check(
   "descriptions injected with Linda (self)",
@@ -62,7 +62,7 @@ check(
 
 S().switchPatient("margaret");
 await new Promise((r) => setTimeout(r, 0));
-check("after switch: still 8 tools", registered.size === 8, `got ${registered.size}`);
+check("after switch: still 9 tools", registered.size === 9, `got ${registered.size}`);
 check(
   "descriptions re-injected with Margaret (proxy)",
   registered.get("get_medications")!.def.description.startsWith("[Acting for Margaret Lee via proxy access]"),
@@ -122,6 +122,18 @@ check("edited text is what was sent", String(sent.sent_text ?? "").includes("rec
 const thr = ds.getThreads("margaret").find((t) => t.id === "thr_rivera_cmp")!;
 check("patient reply appended", thr.messages.at(-1)!.from === "patient");
 check("thread now fully read", thr.messages.every((m) => m.read));
+
+const coverage = await call("get_coverage", {});
+check("coverage navigates to /insurance", S().navRequest?.path === "/insurance");
+check("plan is Margaret's Medicare", /Medicare/.test(JSON.stringify(coverage.plan)), JSON.stringify(coverage.plan));
+check("highlights the denied claim", S().highlight?.kind === "claim" && S().highlight?.id === "clm_echo_0812", JSON.stringify(S().highlight));
+check("denied claim carries a reason and a deadline", (() => {
+  const d = coverage.claims.find((c: any) => c.status === "denied");
+  return Boolean(d && d.denial_reason && d.appeal_deadline);
+})(), JSON.stringify(coverage.claims.find((c: any) => c.status === "denied")));
+check("no appeal tool is exposed", !names().some((n) => /appeal/i.test(n)), names().join());
+const actionable = await call("get_coverage", { only_action_needed: true });
+check("only_action_needed drops the paid claims", actionable.claims.every((c: any) => c.status !== "paid"), JSON.stringify(actionable.claims.map((c: any) => c.status)));
 
 const todo = await call("what_requires_me");
 check("todo navigates to /todo", S().navRequest?.path === "/todo");

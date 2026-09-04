@@ -1,5 +1,7 @@
 import type {
   Appointment,
+  Claim,
+  Insurance,
   LabResult,
   Medication,
   MessageThread,
@@ -132,5 +134,89 @@ export const documents: PendingDocument[] = [
     requiresSignatureBy: "proxy",
     dueBy: "2026-09-11",
     signed: false,
+  },
+];
+
+export const insurance: Insurance[] = [
+  {
+    patientId: "margaret",
+    planName: "Medicare Part B",
+    supplementName: "AARP Supplemental Plan F",
+    memberId: "1EG4-TE5-MK72",
+    effectiveSince: "2013-07-01",
+    deductible: { annual: 240, met: 240 },
+    outOfPocketMax: { annual: 2100, met: 780 },
+  },
+  {
+    patientId: "linda",
+    planName: "Horizon BCBS PPO",
+    memberId: "HZN884210395",
+    groupNumber: "GRP-40128",
+    effectiveSince: "2021-01-01",
+    deductible: { annual: 1500, met: 410 },
+    outOfPocketMax: { annual: 6000, met: 410 },
+  },
+];
+
+export const claims: Claim[] = [
+  {
+    id: "clm_echo_0812",
+    patientId: "margaret",
+    providerId: "prov_chen",
+    serviceDate: "2026-08-12T09:00:00-04:00",
+    description: "Echocardiogram, complete",
+    billed: 1240,
+    planPaid: 0,
+    patientOwes: 1240,
+    status: "denied",
+    denialReason:
+      "Prior authorization was not on file at the time of service. The plan requires " +
+      "authorization for advanced cardiac imaging.",
+    appealDeadline: "2026-10-11",
+  },
+  {
+    id: "clm_labs_0831",
+    patientId: "margaret",
+    providerId: "prov_rivera",
+    serviceDate: "2026-08-31T08:15:00-04:00",
+    description: "Comprehensive metabolic panel and HbA1c",
+    billed: 186,
+    planPaid: 186,
+    patientOwes: 0,
+    status: "paid",
+  },
+  {
+    id: "clm_office_0731",
+    patientId: "margaret",
+    providerId: "prov_patel",
+    serviceDate: "2026-07-31T10:00:00-04:00",
+    description: "Office visit, established patient, 30 minutes",
+    billed: 245,
+    planPaid: 196,
+    patientOwes: 49,
+    status: "paid",
+  },
+  {
+    id: "clm_chen_0908",
+    patientId: "margaret",
+    providerId: "prov_chen",
+    serviceDate: "2026-09-08T10:30:00-04:00",
+    description: "Cardiology follow-up (not yet adjudicated)",
+    billed: 310,
+    planPaid: 0,
+    patientOwes: 0,
+    status: "processing",
+    relatedAppointmentId: "appt_chen_0908",
+  },
+  {
+    id: "clm_linda_annual",
+    patientId: "linda",
+    providerId: "prov_rivera",
+    serviceDate: "2026-03-04T08:00:00-04:00",
+    description: "Annual preventive visit",
+    billed: 320,
+    planPaid: 320,
+    patientOwes: 0,
+    status: "paid",
   },
 ];
